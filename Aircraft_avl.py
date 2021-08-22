@@ -5,7 +5,7 @@ import numpy as np
 import os 
 import subprocess 
 import linecache  
-import Geometria as geo 
+import Geometry as geo 
 import Takeoff
 import AVL_exe as avl 
 import Avl_run as run 
