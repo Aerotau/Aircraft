@@ -7,12 +7,13 @@ import numpy as np
 import os 
 import subprocess 
 import linecache  
-import Geometria as geo 
+import Geometry as geo 
 import Takeoff
 import AVL_exe as avl 
 import Avl_run as run 
 import random
-from deap import creator, base, tools, algorithms
+import database
+#from deap import creator, base, tools, algorithms
 
 def resultados(x):
 
@@ -60,15 +61,34 @@ def resultados(x):
                                 bht,Svt,cvt,bvt,k,
                                 Xac,Xcg,lt, CL, CD, 
                                 Cm0, CLa, Clb, Cma, Cnb, Xnp,SM,Weight_payload,MTOW/g,Constraint))
+
+    db = database.get_database()
+    aircrafts = db["aircrafts"]
     
-    fid.close()
-
-
+    # fid.close()
     fid= open("Empenagem.txt","a+")
 
     fid.write('\r{:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f}'
               ' {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f}'.format(lht,Vht,Sht,cht,bht,Svt,cvt,bvt,SM,Cm0, CLa, Clb, Cma, Cnb, Xnp))
     
+    tail_data = {
+        'lht': lht,
+        'Vht': Vht,
+        'Sht':Sht,
+        'cht':cht,
+        'bht':bht,
+        'Svt':Svt,
+        'cvt':cvt,
+        'bvt':bvt,
+        'SM':SM,
+        'Cm0':Cm0,
+        'CLa':CLa,
+        'Clb':Clb,
+        'Cma':Cma,
+        'Cnb':Cnb,
+        'Xnp':Xnp
+        }
+
     fid.close()
 
     fid= open("Asa.txt","a+")
@@ -78,6 +98,36 @@ def resultados(x):
     
     fid.close()
 
+    wing_data = {
+        'Bw':Bw,
+        'AR':AR,
+        'Sw':Sw,
+        'C_1':C_1,
+        'C_2':C_2,
+        'C_3':C_3,
+        'cma_w':cma_w,
+        'CL':CL,
+        'CD':CD,
+        'Cm0': Cm0
+    }
+
+    aircraft_data = {
+        'Xref': Xref,
+        'Sht': Sht,
+        'k': k,
+        'Xac': Xac,
+        'Xcg': Xcg,
+        'lt': lt,
+        'Weight_payload': Weight_payload,  
+        'MTOW/g': MTOW/g,
+        'MTOW': MTOW,
+        'Pcp':Pcp,
+        'Constraint': Constraint,
+        'wing': wing_data,
+        'tail': tail_data
+        }
+    
+    aircrafts.insert_one(aircraft_data)
 
     return Weight_payload, SM, lt, Bw, AR   
 
