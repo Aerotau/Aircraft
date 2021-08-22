@@ -12,7 +12,8 @@ import Takeoff
 import AVL_exe as avl 
 import Avl_run as run 
 import random
-from deap import creator, base, tools, algorithms
+import database
+#from deap import creator, base, tools, algorithms
 
 def resultados(x):
 
@@ -60,15 +61,53 @@ def resultados(x):
                                 bht,Svt,cvt,bvt,k,
                                 Xac,Xcg,lt, CL, CD, 
                                 Cm0, CLa, Clb, Cma, Cnb, Xnp,SM,Weight_payload,MTOW/g,Constraint))
+
+    db = database.get_database()
+    aircrafts = db["aircrafts"]
     
-    fid.close()
+
+    aircraft_data = {
+        'AR': AR,
+        'Sw': Sw,
+        'cma_w': cma_w,
+        'Bw': Bw,
+        'C_1': C_1,
+        'C_2': C_2,
+        'C_3': C_3,
+        'Xref': Xref,
+        'lht': lht,
+        'Sht': Sht,
+        'cht': cht,
+        'bht': bht,
+        'Svt': Svt,
+        'cvt': cvt,
+        'bvt': bvt,
+        'k': k,
+        'Xac': Xac,
+        'Xcg': Xcg,
+        'lt': lt,
+        'CL': CL,
+        'CD': CD, 
+        'Cm0': Cm0,
+        'CLa': CLa,
+        'Clb': Clb,  
+        'Cma': Cma,  
+        'Cnb': Cnb,  
+        'Xnp': Xnp,  
+        'SM': SM,  
+        'Weight_payload': Weight_payload,  
+        'MTOW/g': MTOW/g,  
+        'Constraint': Constraint
+        }
+    
+    aircrafts.insert_one(aircraft_data)
+    # fid.close()
 
 
     fid= open("Empenagem.txt","a+")
 
     fid.write('\r{:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f}'
               ' {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f} {:0.5f}'.format(lht,Vht,Sht,cht,bht,Svt,cvt,bvt,SM,Cm0, CLa, Clb, Cma, Cnb, Xnp))
-    
     fid.close()
 
     fid= open("Asa.txt","a+")
